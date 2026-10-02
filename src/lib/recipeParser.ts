@@ -103,7 +103,7 @@ export function parseRecipeText(rawText: string, fallbackTitle = ''): ParsedReci
   }
 
   if (!description) {
-    description = `${title} — imported from your recipe notes.`;
+    description = `${title}: imported from your recipe notes.`;
   }
 
   return { title, description, ingredients, steps };

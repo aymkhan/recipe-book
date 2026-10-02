@@ -1,29 +1,37 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { X, ImagePlus, Trash2, FileUp, Sparkles, Loader2 } from 'lucide-react';
 import type { Recipe } from '../types';
+import type { RecipeDraft } from '../lib/storage';
+// v2: new photo uploads go to Supabase Storage instead of being embedded as base64.
+import { supabase } from '../lib/supabaseClient';
+import { useAuth } from '../context/AuthContext';
 import TagInput from './TagInput';
 import DynamicListInput from './DynamicListInput';
 import { extractPdfText } from '../lib/pdfText';
 import { parseRecipeText } from '../lib/recipeParser';
 
+// v2: auto-capitalize user input so lowercase entries read naturally without
+// forcing the user to type it correctly themselves.
+function capitalizeFirst(text: string): string {
+  if (!text) return text;
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function capitalizeWords(text: string): string {
+  return text.split(' ').map(capitalizeFirst).join(' ');
+}
+
 interface AddRecipeModalProps {
   onClose: () => void;
-  onSave: (recipe: Recipe) => void;
+  onCreate: (draft: RecipeDraft) => void;
+  onUpdate: (recipe: Recipe) => void;
   existingLabels: string[];
   /** When provided, the modal edits this recipe in place instead of creating a new one. */
   recipe?: Recipe;
 }
 
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe }: AddRecipeModalProps) {
+export default function AddRecipeModal({ onClose, onCreate, onUpdate, existingLabels, recipe }: AddRecipeModalProps) {
+  const { user } = useAuth();
   const isEditing = Boolean(recipe);
   const [title, setTitle] = useState(recipe?.title ?? '');
   const [description, setDescription] = useState(recipe?.description ?? '');
@@ -46,9 +54,24 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
 
   const handlePhotoUpload = async (fileList: FileList | null) => {
     if (!fileList || fileList.length === 0) return;
+    if (!user) {
+      setError('Sign in to add/edit recipe.');
+      return;
+    }
     const files = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
-    const dataUrls = await Promise.all(files.map(fileToDataUrl));
-    setPhotos((prev) => [...prev, ...dataUrls]);
+    try {
+      const urls = await Promise.all(
+        files.map(async (file) => {
+          const path = `${user.id}/${crypto.randomUUID()}-${file.name}`;
+          const { error: uploadError } = await supabase.storage.from('recipe-photos').upload(path, file);
+          if (uploadError) throw uploadError;
+          return supabase.storage.from('recipe-photos').getPublicUrl(path).data.publicUrl;
+        }),
+      );
+      setPhotos((prev) => [...prev, ...urls]);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not upload one or more photos.');
+    }
   };
 
   const handleRecipeFileSelect = (fileList: FileList | null) => {
@@ -88,7 +111,7 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
       }
 
       if (!rawText.trim()) {
-        setGenerateError('Could not find any text in that file — it may be a scanned image without a text layer.');
+        setGenerateError('Could not find any text in that file. It may be a scanned image without a text layer.');
         return;
       }
 
@@ -111,17 +134,16 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
       setError('Please give your recipe a title.');
       return;
     }
-    const cleanIngredients = ingredients.map((i) => i.trim()).filter(Boolean);
-    const cleanSteps = steps.map((s) => s.trim()).filter(Boolean);
+    const cleanIngredients = ingredients.map((i) => capitalizeFirst(i.trim())).filter(Boolean);
+    const cleanSteps = steps.map((s) => capitalizeFirst(s.trim())).filter(Boolean);
     if (cleanIngredients.length === 0 && cleanSteps.length === 0) {
       setError('Add at least one ingredient or step.');
       return;
     }
 
-    const saved: Recipe = {
-      id: recipe?.id ?? `recipe-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      title: title.trim(),
-      description: description.trim(),
+    const draft: RecipeDraft = {
+      title: capitalizeWords(title.trim()),
+      description: capitalizeFirst(description.trim()),
       ingredients: cleanIngredients,
       steps: cleanSteps,
       sections: recipe?.sections,
@@ -131,9 +153,12 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
       cookTime: cookTime.trim() || undefined,
       servings: servings.trim() || undefined,
       source: importSource,
-      createdAt: recipe?.createdAt ?? new Date().toISOString(),
     };
-    onSave(saved);
+    if (recipe) {
+      onUpdate({ ...draft, id: recipe.id, createdAt: recipe.createdAt, createdBy: recipe.createdBy, createdByName: recipe.createdByName });
+    } else {
+      onCreate(draft);
+    }
   };
 
   return (
@@ -181,7 +206,7 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
               />
             </div>
             <p className="text-xs text-ink-soft mt-1.5">
-              Optional — PNG or JPEG photos from your camera roll or screenshots.
+              Optional. PNG or JPEG photos from your camera roll or screenshots.
             </p>
           </div>
 
@@ -189,7 +214,7 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
             <div>
               <p className="text-sm font-medium text-ink">Fill in from your recipe notes</p>
               <p className="text-xs text-ink-soft mt-0.5">
-                Paste the recipe text below, or upload a .pdf/.txt file — whichever's easier. We'll pull out the
+                Paste the recipe text below, or upload a .pdf/.txt file, whichever's easier. We'll pull out the
                 title, description, ingredients, and steps for you to review.
               </p>
             </div>
@@ -265,7 +290,7 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="A short note about this recipe — where it's from, why you saved it..."
+              placeholder="A short note about this recipe: where it's from, why you saved it..."
               rows={2}
               className="w-full rounded-xl border border-cream-dark bg-surface px-3 py-2.5 text-sm outline-none focus:border-clay resize-none"
             />
@@ -316,7 +341,7 @@ export default function AddRecipeModal({ onClose, onSave, existingLabels, recipe
           {recipe?.sections && recipe.sections.length > 0 && (
             <p className="text-xs text-ink-soft bg-cream-dark rounded-xl px-3 py-2.5">
               This recipe has multiple sections ({recipe.sections.map((s) => s.title).join(', ')}) shown on its
-              detail page. Those aren't editable here — anything you add below appears as regular ingredients/steps
+              detail page. Those aren't editable here; anything you add below appears as regular ingredients/steps
               alongside them.
             </p>
           )}

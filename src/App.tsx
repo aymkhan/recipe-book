@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { UtensilsCrossed, X } from 'lucide-react';
 import type { Recipe } from './types';
-import { loadRecipes, saveRecipes } from './lib/storage';
+import { fetchRecipes, insertRecipe, updateRecipe, deleteRecipeById, type RecipeDraft } from './lib/storage';
+// v2: auth + one-time seed bootstrap for the Supabase migration.
+import { useAuth } from './context/AuthContext';
+import { canImportSeedRecipes, importSeedRecipes } from './lib/seedImport';
 import { collectLabels, splitFamilyLabels, canonicalFamilyLabel } from './lib/labels';
 import { CATEGORY_DEFS, computeCategoryCounts, findCategoryForLabel } from './lib/categories';
 import { applyTheme, getStoredTheme, type Theme } from './lib/theme';
@@ -11,21 +14,45 @@ import CategoryChips from './components/CategoryChips';
 import RecipeCard from './components/RecipeCard';
 import RecipeDetailModal from './components/RecipeDetailModal';
 import AddRecipeModal from './components/AddRecipeModal';
+// v2: gate opening the Add recipe form behind sign-in, so nobody fills out a
+// recipe only to find out at submit time that they needed to sign in first.
+import SignInPrompt from './components/SignInPrompt';
 
 type ActiveFilter = { source: 'label' | 'category'; value: string } | null;
 
 function App() {
-  const [recipes, setRecipes] = useState<Recipe[]>(() => loadRecipes());
+  const { user, displayName } = useAuth();
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [activeFilter, setActiveFilter] = useState<ActiveFilter>(null);
   const [query, setQuery] = useState('');
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [theme, setTheme] = useState<Theme>(() => getStoredTheme());
+  const [canImport, setCanImport] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
 
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  useEffect(() => {
+    fetchRecipes()
+      .then(setRecipes)
+      .catch((e) => setError(e instanceof Error ? e.message : 'Could not load recipes.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (!user || !import.meta.env.DEV) {
+      setCanImport(false);
+      return;
+    }
+    canImportSeedRecipes().then(setCanImport).catch(() => setCanImport(false));
+  }, [user, recipes.length]);
 
   const labelCounts = useMemo(() => collectLabels(recipes), [recipes]);
   const { family: familyLabelCounts } = useMemo(() => splitFamilyLabels(labelCounts), [labelCounts]);
@@ -49,19 +76,28 @@ function App() {
     });
   }, [recipes, activeFilter, query]);
 
-  const persist = (next: Recipe[]) => {
-    setRecipes(next);
-    saveRecipes(next);
+  const handleSaveRecipe = async (draft: RecipeDraft) => {
+    if (!user) {
+      setError('Sign in to add/edit recipe.');
+      return;
+    }
+    try {
+      const created = await insertRecipe(draft, user.id, displayName || user.email || 'Someone');
+      setRecipes((prev) => [created, ...prev]);
+      setIsAddOpen(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not save the recipe.');
+    }
   };
 
-  const handleSaveRecipe = (recipe: Recipe) => {
-    persist([recipe, ...recipes]);
-    setIsAddOpen(false);
-  };
-
-  const handleDeleteRecipe = (id: string) => {
-    persist(recipes.filter((r) => r.id !== id));
-    setSelectedRecipe(null);
+  const handleDeleteRecipe = async (id: string) => {
+    try {
+      await deleteRecipeById(id);
+      setRecipes((prev) => prev.filter((r) => r.id !== id));
+      setSelectedRecipe(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not delete the recipe.');
+    }
   };
 
   const handleEditRecipe = (recipe: Recipe) => {
@@ -69,10 +105,29 @@ function App() {
     setEditingRecipe(recipe);
   };
 
-  const handleUpdateRecipe = (updated: Recipe) => {
-    persist(recipes.map((r) => (r.id === updated.id ? updated : r)));
-    setEditingRecipe(null);
-    setSelectedRecipe(updated);
+  const handleUpdateRecipe = async (updated: Recipe) => {
+    try {
+      const saved = await updateRecipe(updated);
+      setRecipes((prev) => prev.map((r) => (r.id === saved.id ? saved : r)));
+      setEditingRecipe(null);
+      setSelectedRecipe(saved);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not update the recipe.');
+    }
+  };
+
+  const handleImportSeed = async () => {
+    if (!user) return;
+    setImporting(true);
+    try {
+      await importSeedRecipes(user.id, displayName || user.email || 'Owner');
+      setRecipes(await fetchRecipes());
+      setCanImport(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Seed import failed.');
+    } finally {
+      setImporting(false);
+    }
   };
 
   const handleSelectLabelFromDetail = (label: string) => {
@@ -91,18 +146,48 @@ function App() {
     setQuery('');
   };
 
+  const handleOpenAddRecipe = () => {
+    if (!user) {
+      setShowSignInPrompt(true);
+      return;
+    }
+    setIsAddOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-cream">
       <Header
         query={query}
         onQueryChange={setQuery}
-        onAddRecipe={() => setIsAddOpen(true)}
+        onAddRecipe={handleOpenAddRecipe}
         recipeCount={recipes.length}
         theme={theme}
         onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
       />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col gap-4">
+        {error && (
+          <div className="flex items-center justify-between gap-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-2.5">
+            <span>{error}</span>
+            <button onClick={() => setError('')} aria-label="Dismiss" className="shrink-0 hover:text-red-900">
+              <X size={15} />
+            </button>
+          </div>
+        )}
+
+        {canImport && (
+          <div className="flex items-center justify-between gap-3 rounded-xl bg-basil/10 border border-basil/30 text-basil-dark text-sm px-4 py-2.5">
+            <span>The recipe table is empty. Import the original seed recipes under your account?</span>
+            <button
+              onClick={handleImportSeed}
+              disabled={importing}
+              className="shrink-0 font-medium hover:underline disabled:opacity-60 cursor-pointer"
+            >
+              {importing ? 'Importing...' : 'Import seed recipes'}
+            </button>
+          </div>
+        )}
+
         {hasActiveFilters && (
           <div className="flex justify-end">
             <button
@@ -127,7 +212,11 @@ function App() {
           totalCount={recipes.length}
         />
 
-        {filteredRecipes.length === 0 ? (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center text-center py-24 gap-3">
+            <p className="text-sm text-ink-soft">Loading recipes...</p>
+          </div>
+        ) : filteredRecipes.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-24 gap-3">
             <div className="w-14 h-14 rounded-full bg-cream-dark flex items-center justify-center text-ink-soft">
               <UtensilsCrossed size={24} />
@@ -153,6 +242,7 @@ function App() {
           onDelete={handleDeleteRecipe}
           onEdit={handleEditRecipe}
           onSelectLabel={handleSelectLabelFromDetail}
+          canEdit={user?.id === selectedRecipe.createdBy}
         />
       )}
 
@@ -163,10 +253,13 @@ function App() {
             setIsAddOpen(false);
             setEditingRecipe(null);
           }}
-          onSave={editingRecipe ? handleUpdateRecipe : handleSaveRecipe}
+          onCreate={handleSaveRecipe}
+          onUpdate={handleUpdateRecipe}
           existingLabels={labelCounts.map((l) => l.label)}
         />
       )}
+
+      {showSignInPrompt && <SignInPrompt onClose={() => setShowSignInPrompt(false)} />}
     </div>
   );
 }

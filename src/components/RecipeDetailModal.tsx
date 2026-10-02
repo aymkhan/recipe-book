@@ -8,9 +8,12 @@ interface RecipeDetailModalProps {
   onDelete: (id: string) => void;
   onEdit: (recipe: Recipe) => void;
   onSelectLabel: (label: string) => void;
+  // v2: only the recipe's original submitter sees the Edit/Delete controls.
+  // This is a UX nicety; the real enforcement is Supabase Row Level Security.
+  canEdit: boolean;
 }
 
-export default function RecipeDetailModal({ recipe, onClose, onDelete, onEdit, onSelectLabel }: RecipeDetailModalProps) {
+export default function RecipeDetailModal({ recipe, onClose, onDelete, onEdit, onSelectLabel, canEdit }: RecipeDetailModalProps) {
   const [activePhoto, setActivePhoto] = useState(0);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
@@ -167,40 +170,42 @@ export default function RecipeDetailModal({ recipe, onClose, onDelete, onEdit, o
             </>
           )}
 
-          <div className="pt-2 border-t border-cream-dark">
-            {confirmingDelete ? (
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-ink-soft">Delete this recipe?</span>
-                <button
-                  onClick={() => onDelete(recipe.id)}
-                  className="px-3 py-1.5 rounded-full bg-red-500 text-white font-medium hover:bg-red-600"
-                >
-                  Yes, delete
-                </button>
-                <button
-                  onClick={() => setConfirmingDelete(false)}
-                  className="px-3 py-1.5 rounded-full border border-cream-dark text-ink-soft hover:bg-cream-dark"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => onEdit(recipe)}
-                  className="flex items-center gap-1.5 text-sm text-ink-soft hover:text-clay"
-                >
-                  <Pencil size={15} /> Edit recipe
-                </button>
-                <button
-                  onClick={() => setConfirmingDelete(true)}
-                  className="flex items-center gap-1.5 text-sm text-ink-soft hover:text-red-500"
-                >
-                  <Trash2 size={15} /> Delete recipe
-                </button>
-              </div>
-            )}
-          </div>
+          {canEdit && (
+            <div className="pt-2 border-t border-cream-dark">
+              {confirmingDelete ? (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-ink-soft">Delete this recipe?</span>
+                  <button
+                    onClick={() => onDelete(recipe.id)}
+                    className="px-3 py-1.5 rounded-full bg-red-500 text-white font-medium hover:bg-red-600"
+                  >
+                    Yes, delete
+                  </button>
+                  <button
+                    onClick={() => setConfirmingDelete(false)}
+                    className="px-3 py-1.5 rounded-full border border-cream-dark text-ink-soft hover:bg-cream-dark"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => onEdit(recipe)}
+                    className="flex items-center gap-1.5 text-sm text-ink-soft hover:text-clay"
+                  >
+                    <Pencil size={15} /> Edit recipe
+                  </button>
+                  <button
+                    onClick={() => setConfirmingDelete(true)}
+                    className="flex items-center gap-1.5 text-sm text-ink-soft hover:text-red-500"
+                  >
+                    <Trash2 size={15} /> Delete recipe
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

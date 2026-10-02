@@ -11,7 +11,7 @@ export interface Recipe {
   ingredients: string[];
   steps: string[];
   /** For recipes that bundle multiple distinct variations (e.g. two versions
-   * of the same dish) — when present, the detail view renders these instead
+   * of the same dish): when present, the detail view renders these instead
    * of the flat ingredients/steps above. */
   sections?: RecipeSection[];
   labels: string[];
@@ -23,4 +23,8 @@ export interface Recipe {
   servings?: string;
   source?: string;
   createdAt: string;
+  // v2: who submitted this recipe (Supabase auth user id + a denormalized
+  // display name), used to gate editing/deleting to the original submitter.
+  createdBy: string;
+  createdByName: string;
 }
