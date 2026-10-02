@@ -3,18 +3,12 @@ import type { Recipe } from '../types';
 // Recipes imported from the user's Notes app exports (PDF), lightly edited
 // for grammar and flow. Content, quantities, and technique notes are kept
 // as close to the originals as possible.
-//
-// v2: this array is now only the one-time source data for the Supabase
-// import bootstrap (see src/lib/seedImport.ts). It's no longer read directly
-// by the running app. `id`/`createdBy`/`createdByName` are assigned at import
-// time (the DB generates a real uuid `id`; `createdBy`/`createdByName` come
-// from whoever runs the import), so this array is missing those two fields.
-export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
+export const seedRecipes: Recipe[] = [
   {
     id: 'ammi-aloo-gosht',
     title: "Ammi's Aloo Gosht",
     description:
-      "Ammi's beef masala base for aloo gosht: a good bhoono here is what makes the potatoes taste right once they go in.",
+      "Ammi's beef masala base for aloo gosht — a good bhoono here is what makes the potatoes taste right once they go in.",
     ingredients: [
       'Beef, cubed',
       'Oil',
@@ -30,7 +24,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     steps: [
       'Heat oil and add the onions.',
       'Add the beef.',
-      'Add the whole garam masala: cinnamon stick, cardamom, black pepper, and cloves.',
+      'Add the whole garam masala — cinnamon stick, cardamom, black pepper, and cloves.',
       'Add the garlic paste, ginger paste, turmeric, coriander powder, salt, and a little cumin powder.',
       "Cook the meat down without adding water yet, so the spices coat it fully before you add the potatoes and let it simmer into a gravy.",
     ],
@@ -59,7 +53,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     ],
     steps: [
       'Combine the boiled, mashed potatoes with the salt, chaat masala, cumin powder, Kashmiri chili powder, cumin seeds, coriander, green chilies, spring onions, and lemon juice.',
-      'Shape the mixture into patties, which makes about 12–14 tikkis.',
+      'Shape the mixture into patties — this makes about 12–14 tikkis.',
       'Dip each patty in beaten egg and fry in hot oil until golden on both sides.',
     ],
     labels: ['vegetarian', 'snack', 'Pakistani', 'appetizer'],
@@ -71,7 +65,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-omelette',
     title: "Ammi's No-Oil Omelette",
     description:
-      "A light vegetable omelette Ammi makes with butter instead of cooking oil. Quick, simple, and no fuss.",
+      "A light vegetable omelette Ammi makes with butter instead of cooking oil — quick, simple, and no fuss.",
     ingredients: [
       '1 egg',
       'A little salt',
@@ -97,9 +91,9 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-bhindi-aloo-gobi',
     title: "Ammi's Bhindi (or Aloo Gobi) Masala",
     description:
-      "Ammi's all-purpose saucy masala base: swap in bhindi, gobi, baigan, or aloo matar tamatar and it works the same way.",
+      "Ammi's all-purpose saucy masala base — swap in bhindi, gobi, baigan, or aloo matar tamatar and it works the same way.",
     ingredients: [
-      'Bhindi (okra), cut into small pieces, or substitute gobi, baigan, or aloo matar tamatar',
+      'Bhindi (okra), cut into small pieces — or substitute gobi, baigan, or aloo matar tamatar',
       'Mustard oil',
       '4–5 methi (fenugreek) seeds',
       'Onions, chopped',
@@ -113,7 +107,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     ],
     steps: [
       'Wash and cut the bhindi into small cubes.',
-      "Heat mustard oil in a pot and add the methi seeds, but don't let them burn.",
+      "Heat mustard oil in a pot and add the methi seeds — don't let them burn.",
       'Add the chopped onions.',
       'Stir in the turmeric, ginger-garlic paste, a generous amount of coriander powder, cumin powder, paprika, and salt.',
       'Add the chopped tomatoes and bhoono (fry down) until the oil separates.',
@@ -141,7 +135,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'Paprika',
     ],
     steps: [
-      'Heat oil in a pot and add the onions, just until pinkish, not golden or browned.',
+      'Heat oil in a pot and add the onions — just until pinkish, not golden or browned.',
       'Add the chicken along with the ginger-garlic paste and mix.',
       'Season with salt, pepper, and a little paprika, and cook for a few minutes until the chicken turns whitish.',
       'Add water to the pot (warm water works well) and let it cook.',
@@ -159,7 +153,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-chicken-tikka',
     title: "Ammi's Chicken Tikka",
     description:
-      "Ammi's simple stovetop chicken tikka: marinated and cooked right in the same pot, sometimes over a bed of browned onions.",
+      "Ammi's simple stovetop chicken tikka — marinated and cooked right in the same pot, sometimes over a bed of browned onions.",
     ingredients: ['Chicken, washed and strained', 'Shan tikka masala', 'Ginger-garlic paste', 'Plain yogurt', 'Oil'],
     steps: [
       'Mix the oil, ginger-garlic paste, Shan tikka masala, and plain yogurt together in a pot.',
@@ -175,9 +169,9 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-chinese-veggies',
     title: "Ammi's Chinese Veggie Stir-Fry (Incomplete)",
     description:
-      "An unfinished recipe: just the vegetable lineup Ammi uses for her Chinese-style stir-fry, saved before the method made it in.",
+      "An unfinished recipe — just the vegetable lineup Ammi uses for her Chinese-style stir-fry, saved before the method made it in.",
     ingredients: ['Cabbage', 'Cauliflower', 'Carrots', 'Bell peppers', 'Bok choy'],
-    steps: ["This note is still a work in progress. For now, it's just the vegetables Ammi reaches for."],
+    steps: ["This note is still a work in progress — for now, it's just the vegetables Ammi reaches for."],
     labels: ['vegetarian', 'Chinese', 'Ammi'],
     photos: ['/images/recipes/chinese-veggies.jpg'],
     source: 'Notes app',
@@ -187,7 +181,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-daal-chawal',
     title: "Ammi's Everyday Daal",
     description:
-      'The daal Ammi makes for daily daal chawal: masoor and moong daal finished with a sizzling cumin-and-red-chili tarka.',
+      'The daal Ammi makes for daily daal chawal — masoor and moong daal finished with a sizzling cumin-and-red-chili tarka.',
     ingredients: [
       'Red daal (masoor)',
       'Yellow daal (moong), half the amount of masoor',
@@ -201,9 +195,9 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'Whole red chili pepper',
     ],
     steps: [
-      "Wash the masoor and moong daal and add to a pot with water. Don't add salt yet; it goes in later, on its own.",
+      "Wash the masoor and moong daal and add to a pot with water. Don't add salt yet — it goes in later, on its own.",
       'Add the ginger-garlic paste, turmeric, paprika, and finely chopped onion.',
-      "Cook uncovered on medium-low heat, checking often so the water doesn't run dry. Top it up as needed.",
+      "Cook uncovered on medium-low heat, checking often so the water doesn't run dry — top it up as needed.",
       'Once the daal is soft, mash it with a whisk or beater to thin it out.',
       "Add salt, then add as much water as needed and bring it to a boil, watching so it doesn't overflow.",
       'In a separate pan, heat oil and add cumin seeds and a whole red chili pepper.',
@@ -218,7 +212,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-mutton-curry',
     title: "Ammi's Katay Masale ka Gosht (Mutton, Incomplete)",
     description:
-      "Ammi's whole-spice mutton curry: marinated meat cooked down with big chunks of onion and whole garam masala. The note cuts off partway through.",
+      "Ammi's whole-spice mutton curry — marinated meat cooked down with big chunks of onion and whole garam masala. The note cuts off partway through.",
     ingredients: [
       'Mutton',
       'Ginger-garlic paste',
@@ -234,9 +228,9 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     steps: [
       'Marinate the meat with the ginger-garlic paste and salt.',
       'Heat oil in a pot and add the black cardamoms, cloves, whole black pepper, and cinnamon sticks.',
-      'Add the onion chunks and sauté briefly, just enough to soften, without browning them.',
+      'Add the onion chunks and sauté briefly — just enough to soften, without browning them.',
       'Add the meat along with the coriander powder.',
-      "This note ends here. The rest of Ammi's method wasn't written down.",
+      "This note ends here — the rest of Ammi's method wasn't written down.",
     ],
     labels: ['mutton', 'Pakistani', 'Ammi', 'dinner'],
     photos: ['/images/recipes/mutton-curry.jpg'],
@@ -264,7 +258,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'In a pot, add a tablespoon of water, then pour in the whole milk. Keep the heat medium-low and stir often while it comes to a gentle boil.',
       'Add the soaked rice and let it cook together with the milk, stirring regularly.',
       "Once the rice is soft, break most of it up with a whisk until the kheer thickens.",
-      'Stir in the condensed milk, then add sugar to taste. This will thin the kheer out slightly.',
+      'Stir in the condensed milk, then add sugar to taste — this will thin the kheer out slightly.',
       'Add the cardamom powder and biryani essence, and keep stirring until combined.',
       'Serve topped with sliced almonds and chopped pistachios.',
     ],
@@ -294,10 +288,10 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
         ],
         steps: [
           'Wash the rice and daal.',
-          'Heat oil in a pot, add the whole garam masala (cinnamon stick, cardamom, cloves, whole black pepper, and bay leaf), and sauté briefly.',
+          'Heat oil in a pot, add the whole garam masala — cinnamon stick, cardamom, cloves, whole black pepper, and bay leaf — and sauté briefly.',
           'Add the thinly sliced onion and sauté until browned.',
           'Add the washed rice and daal along with salt, and bhoono (fry) together for a bit.',
-          "Add water, cover, and let it cook, checking every few minutes so it doesn't stick to the bottom.",
+          "Add water, cover, and let it cook — checking every few minutes so it doesn't stick to the bottom.",
         ],
       },
       {
@@ -331,7 +325,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-yakhni',
     title: "Ammi's Yakhni (Incomplete)",
     description:
-      "A clear, whole-spice chicken broth Ammi simmers low and slow. The note stops right as it starts to come together.",
+      "A clear, whole-spice chicken broth Ammi simmers low and slow — the note stops right as it starts to come together.",
     ingredients: [
       'Chicken, with bones, washed and cleaned',
       'Oil, a small amount',
@@ -347,7 +341,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'Add the thinly sliced onions and sauté until browned.',
       'Add the chicken along with the ginger paste, garlic paste, salt, and cumin seeds, and cook until it changes color.',
       "Add plenty of water, bring to a boil with the lid on (watch that it doesn't spill over), then let it simmer on medium heat.",
-      "This note ends here. The rest of the method wasn't written down.",
+      "This note ends here — the rest of the method wasn't written down.",
     ],
     labels: ['chicken', 'soup', 'Pakistani', 'Ammi'],
     photos: ['/images/recipes/yakhni.jpg'],
@@ -358,7 +352,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'rkk-chicken-biryani',
     title: "RKK's Chicken Biryani",
     description:
-      "A detailed layered chicken biryani with its own dum rice section, written up by RKK, down to how to test the rice for doneness.",
+      "A detailed layered chicken biryani with its own dum rice section — written up by RKK, down to how to test the rice for doneness.",
     ingredients: [
       '3½–4 cups rice, washed and soaked',
       '2 lb chicken',
@@ -383,8 +377,8 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'Heat oil in a pan, add bay leaves and cumin seeds, then add the chicken and potato.',
       'Add the Shan Bombay biryani masala, aloo Bukhara, ginger paste, garlic paste, sliced tomato, yogurt, half the fried onions, and a pinch of food color.',
       'Cover and cook on medium-high heat while you start the rice.',
-      "For the rice: bring the water to a boil with salt, bay leaves, cardamom, cumin seeds, biryani essence, hari mirch, and oil. Add the soaked rice and cook only to about 80%. Test by pressing a grain between your fingers; if it still resists your nail slightly, it's ready. Strain.",
-      'Once the rice is ready, check the chicken pot: make sure any steam or water on the lid drips back in, and add a little water if it looks dry (you want some gravy).',
+      "For the rice: bring the water to a boil with salt, bay leaves, cardamom, cumin seeds, biryani essence, hari mirch, and oil. Add the soaked rice and cook only to about 80% — test by pressing a grain between your fingers; if it still resists your nail slightly, it's ready. Strain.",
+      'Once the rice is ready, check the chicken pot — make sure any steam or water on the lid drips back in, and add a little water if it looks dry (you want some gravy).',
       'Arrange tomato slices and the remaining fried onions around the pot, squeeze in the lemon juice, then layer the rice on top.',
       'Top with cilantro, hari mirch, a pinch of food color mixed with a few drops of kewra and 2 tbsp water, and drizzle oil around the edges.',
       'Cover on low heat for 8–10 minutes, then turn off the burner and let it rest, still covered, for 5 minutes before serving.',
@@ -398,7 +392,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'vegetable-chow-mein',
     title: 'Vegetable Chow Mein',
     description:
-      'The vegetable-forward version of chow mein, flagged in the notes as the better of two recipes, made with a proper stir-fry sauce.',
+      'The vegetable-forward version of chow mein, flagged in the notes as the better of two recipes — made with a proper stir-fry sauce.',
     ingredients: [
       'Spaghetti or chow mein noodles',
       'Cabbage, thinly sliced',
@@ -432,7 +426,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-corn-rice',
     title: "Ammi's Corn Rice",
-    description: 'A simple, fragrant rice pilaf studded with sweet corn, finished with a spoonful of yogurt for extra creaminess.',
+    description: 'A simple, fragrant rice pilaf studded with sweet corn — finished with a spoonful of yogurt for extra creaminess.',
     ingredients: [
       'Rice, washed and soaked 30 minutes',
       'Oil',
@@ -448,7 +442,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     ],
     steps: [
       'Wash and soak the rice for 30 minutes.',
-      'Heat oil in a pot and add the cinnamon, cloves, whole black pepper, and cinnamon stick, then sauté briefly.',
+      'Heat oil in a pot and add the cinnamon, cloves, whole black pepper, and cinnamon stick — sauté briefly.',
       'Add the thinly sliced onions and sauté until softened.',
       'Add the rice, salt, and the right amount of boiled water for your quantity of rice, then stir in the corn.',
       'Let it cook for a while, and once the rice starts to boil, stir in the smoothed-out plain yogurt and mix well.',
@@ -462,7 +456,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'daal-tadka-mazadaar',
     title: 'Daal Tadka (Mazadaar Recipe)',
-    description: 'A three-daal blend finished with a generous butter-and-garlic tarka, adapted from a recipe by Mazadaar.',
+    description: 'A three-daal blend finished with a generous butter-and-garlic tarka — adapted from a recipe by Mazadaar.',
     ingredients: [
       '1/2 cup moong daal',
       '1/4 cup masoor daal',
@@ -498,7 +492,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     title: 'Doodh Patti Chai',
     description: 'A creamy, stovetop-stirred milk tea recipe, written up as a note to a friend who kept asking for it.',
     ingredients: [
-      "3 cups whole milk (not a plant milk, since it changes the taste)",
+      "3 cups whole milk (not a plant milk — it changes the taste)",
       '1/2 cup water',
       '3–4 black tea bags (Tapal Danedar or Tetley, or any black tea)',
       '3–4 cardamom pods',
@@ -506,7 +500,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     ],
     steps: [
       'Add all the ingredients to a pot and cook over medium-high heat, bringing it to a boil.',
-      'Once boiling, start stirring by scooping the tea with a ladle and pouring it back into the pot. This is what makes it creamier.',
+      'Once boiling, start stirring by scooping the tea with a ladle and pouring it back into the pot — this is what makes it creamier.',
       'Keep doing this until the tea reaches a perfect beige/light brown color.',
       'Pour through a strainer into cups so no loose tea or cardamom pods make it through.',
       'Add more sugar directly to your cup if needed. Enjoy!',
@@ -530,7 +524,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'Soy sauce',
     ],
     steps: [
-      'Heat oil in a pan and add the garlic and the white parts of the green onions, then fry briefly.',
+      'Heat oil in a pan and add the garlic and the white parts of the green onions — fry briefly.',
       'Add the white rice along with the knorr cube, white pepper, and soy sauce.',
       'Stir-fry for a few minutes, then finish with the green parts of the green onions.',
     ],
@@ -542,36 +536,27 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'kaka-goat-biryani',
     title: "Kaka's Goat Biryani",
-    description: 'Biryani cooked with fragrant basmati rice and aromatic spices, with fall-apart tender meat.',
+    description: "Kaka's version of beef biryani — goat marinated in yogurt and whole garam masala, pressure-cooked until it falls apart.",
     ingredients: [
-      '1½ lb goat',
-      '1½ cup yogurt',
-      '2½ large onions, fried and crushed (use only half of it in the marinade)',
-      '1 tsp crushed garlic',
-      '1 tsp crushed ginger',
-      '4 tsp coriander powder',
-      '1½ tsp salt',
-      '1 tsp red chili powder',
-      'Grind:',
-      '4–5 cloves',
-      '4–5 cardamom',
-      '2 inch cinnamon',
-      '1 black cardamom',
+      'Goat',
+      '2½ onions, thinly sliced',
+      'Oil',
+      'Food coloring',
+      'Salt',
+      'Potatoes, fried',
+      '4 tbsp ginger paste (adrak)',
+      '2 tbsp garlic paste (lehsan)',
+      'Whole garam masala, ground (long, elaichi, daar cheeni)',
+      '1 small cup oil',
+      '1½ cups plain yogurt',
     ],
     steps: [
-      'Combine everything together and marinate overnight if possible.',
-      'Pressure cook until 80% done. Dry out any water left over after pressure cooking.',
-      'Peel 6 medium potatoes, cut into pieces, and marinate in salt and yellow color for 30 minutes. Deep fry and set aside.',
-      '1½ kg rice (about 7 cups), soaked 1–2 hours.',
-      'Add to the water:',
-      '7 tsp salt',
-      '4 cloves',
-      '4 green cardamom',
-      '2 bay leaves',
-      'Bring to a boil, then add the rice. Cook until 80% done and drain the water.',
-      'Now start the layering process: layer the rice first, then add the goat and potatoes. The last layer should be rice. Pour over saffron and yellow color water, the leftover fried onions, and sprinkle with rose water.',
-      'Bake in the oven at 330°F for 35–45 minutes.',
-      'Ready to serve.',
+      'Wash the meat.',
+      'Fry the thinly sliced onions until completely browned, then set aside.',
+      'Fry the potatoes with oil, a little food coloring, and salt, then set aside.',
+      'Marinate the goat with the ginger paste, garlic paste, ground whole garam masala, oil, yogurt, and salt, mixing everything well.',
+      'Pressure-cook the marinated goat for about 20 minutes, until fully tender.',
+      'Bhoono (fry down) the meat briefly and set the gravy aside for layering with the rice.',
     ],
     labels: ['mutton', 'biryani', 'rice', 'Pakistani', 'Kaka'],
     photos: ['/images/recipes/beef-biryani-kaka.jpg'],
@@ -581,7 +566,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-khushka-rice',
     title: "Ammi's Khushka Rice",
-    description: "Plain spiced rice, browned onions and all: the kind Ammi makes as a simple side to go with any curry.",
+    description: "Plain spiced rice, browned onions and all — the kind Ammi makes as a simple side to go with any curry.",
     ingredients: [
       'Rice, washed and soaked',
       'Onions',
@@ -594,7 +579,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     steps: [
       'Wash and soak the rice.',
       'Brown the onions in a pot and set them aside.',
-      'In the same pot, add oil and the whole garam masala: cloves, cardamom, cinnamon stick, whole black pepper, and bay leaf.',
+      'In the same pot, add oil and the whole garam masala — cloves, cardamom, cinnamon stick, whole black pepper, and bay leaf.',
       'Add the soaked rice and bhoono it with the oil and spices (add peas here too, if using) until the rice starts smelling fragrant.',
       'Add the right amount of water for your quantity of rice, along with salt, and let it cook.',
       'Add the browned onions and some melted butter or ghee.',
@@ -650,7 +635,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'Now add paprika, turmeric, salt, and the tomatoes.',
       'Cook the beef until the oil starts to show and beef is completely cooked.',
       'Add plenty of water to the pot. Add hari mirch and cumin powder. Simmer until the beef is very tender and the tomatoes have broken down into a reddish curry.',
-      'To serve: add noodles to a bowl, top with the beef curry and coconut soup, and finish with your choice of toppings: fried samosa patti or chips, spring onions, roasted sesame seeds, fried garlic, lemon juice, and cilantro.',
+      'To serve: add noodles to a bowl, top with the beef curry and coconut soup, and finish with your choice of toppings — fried samosa patti or chips, spring onions, roasted sesame seeds, fried garlic, lemon juice, and cilantro.',
     ],
     labels: ['beef', 'noodles', 'Burmese', 'Munji', 'dinner'],
     photos: ['/images/recipes/khao-suey.jpg'],
@@ -738,7 +723,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'abbu-shrimp-curry',
     title: "Abbu's Shrimp Curry",
     description:
-      "Abbu's shrimp curry, cooked in two stages: the shrimp seared first, then finished in a separate, from-scratch curry base.",
+      "Abbu's shrimp curry, cooked in two stages — the shrimp seared first, then finished in a separate, from-scratch curry base.",
     ingredients: [
       'Shrimp, washed, cleaned, and dried',
       'Turmeric',
@@ -779,7 +764,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-tamatar-gosht',
     title: "Ammi's Tamatar Gosht",
-    description: "A rich tomato beef curry: the kind where the meat gets properly bhoono'd before the tomatoes ever go in.",
+    description: "A rich tomato beef curry — the kind where the meat gets properly bhoono'd before the tomatoes ever go in.",
     ingredients: [
       'Beef (1 lb)',
       'Tomatoes (3 large, for 1 lb beef)',
@@ -801,7 +786,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
       'Heat oil in a pot and sauté the whole garam masala briefly.',
       'Add the onions and cook until lightly browned/pinkish.',
       'Add the beef along with the garlic-ginger paste, black pepper, salt, turmeric, paprika, coriander powder, and a little cumin powder, and stir to combine.',
-      "Cover and let it cook. The meat will release its own water; cook it further to dry that out (bhoono taake paani khushk ho jaye).",
+      "Cover and let it cook. The meat will release its own water — cook it further to dry that out (bhoono taake paani khushk ho jaye).",
       "Add water as needed to keep cooking the meat until it's fully tender, then let that water dry out too.",
       'Once the meat is cooked and tender, add the tomatoes (cut in small cubes), cover, and let them cook for 5 minutes until soft.',
       'Mash the tomatoes with a spatula, then stir in the ketchup.',

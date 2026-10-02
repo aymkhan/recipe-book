@@ -13,7 +13,7 @@ function initial(name: string) {
   return name.charAt(0).toUpperCase();
 }
 
-// A — Ticket / stamp: dashed borders, playful, no boxed container
+// A: Ticket / stamp, dashed borders, playful, no boxed container
 export function FamilyNavTicket({ labels, active, onSelect }: VariantProps) {
   if (labels.length === 0) return null;
   return (
@@ -44,7 +44,7 @@ export function FamilyNavTicket({ labels, active, onSelect }: VariantProps) {
   );
 }
 
-// B — Warm gradient banner with glassy chips
+// B: Warm gradient banner with glassy chips
 export function FamilyNavGradient({ labels, active, onSelect }: VariantProps) {
   if (labels.length === 0) return null;
   return (
@@ -75,7 +75,7 @@ export function FamilyNavGradient({ labels, active, onSelect }: VariantProps) {
   );
 }
 
-// C — Avatar initials, story-bar style
+// C: Avatar initials, story-bar style
 export function FamilyNavAvatars({ labels, active, onSelect }: VariantProps) {
   if (labels.length === 0) return null;
   return (
@@ -121,7 +121,7 @@ const SOLID_COLORS = [
   { bg: 'bg-gold', text: 'text-neutral-900', count: 'text-neutral-900/60' },
 ];
 
-// E — Modern solid pills: full name inside, no boxed card, no plain circles
+// E: Modern solid pills, full name inside, no boxed card, no plain circles
 export function FamilyNavModern({ labels, active, onSelect }: VariantProps) {
   if (labels.length === 0) return null;
   return (
@@ -149,7 +149,7 @@ export function FamilyNavModern({ labels, active, onSelect }: VariantProps) {
   );
 }
 
-// D — Minimal underline tabs, no card chrome at all
+// D: Minimal underline tabs, no card chrome at all
 export function FamilyNavMinimal({ labels, active, onSelect }: VariantProps) {
   if (labels.length === 0) return null;
   return (

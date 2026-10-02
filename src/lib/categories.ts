@@ -9,7 +9,7 @@ export interface CategoryDef {
 const has = (labels: string[], value: string) => labels.includes(value);
 const hasAny = (labels: string[], values: string[]) => values.some((v) => labels.includes(v));
 
-// A deliberately short, curated list of top-level categories — not every
+// A deliberately short, curated list of top-level categories. Not every
 // label recipes carry needs to show up as a filter chip.
 export const CATEGORY_DEFS: CategoryDef[] = [
   { id: 'vegetarian', label: 'Vegetarian', match: (l) => has(l, 'vegetarian') },

@@ -1,6 +1,8 @@
 import { Search, Plus, ChefHat, X } from 'lucide-react';
 import type { Theme } from '../lib/theme';
 import ThemeToggle from './ThemeToggle';
+// v2: shows magic-link sign-in state so visitors know whether they can add/edit recipes.
+import SignInPanel from './SignInPanel';
 
 interface HeaderProps {
   query: string;
@@ -25,7 +27,8 @@ export default function Header({ query, onQueryChange, onAddRecipe, recipeCount,
               <p className="text-xs text-ink-soft leading-tight">{recipeCount} saved recipes</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
+            <SignInPanel />
             <ThemeToggle theme={theme} onToggle={onToggleTheme} />
             <button
               onClick={onAddRecipe}
