@@ -1,4 +1,5 @@
-import { Plus, X } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, X, GripVertical } from 'lucide-react';
 
 interface DynamicListInputProps {
   items: string[];
@@ -8,6 +9,9 @@ interface DynamicListInputProps {
 }
 
 export default function DynamicListInput({ items, onChange, placeholder, numbered }: DynamicListInputProps) {
+  // v2: numbered lists (currently just Steps) can be drag-reordered.
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+
   const update = (index: number, value: string) => {
     const next = [...items];
     next[index] = value;
@@ -20,10 +24,27 @@ export default function DynamicListInput({ items, onChange, placeholder, numbere
 
   const add = () => onChange([...items, '']);
 
+  const reorder = (to: number) => {
+    if (dragIndex === null || dragIndex === to) return;
+    const next = [...items];
+    const [moved] = next.splice(dragIndex, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
+    setDragIndex(null);
+  };
+
   return (
     <div className="flex flex-col gap-2">
       {items.map((item, i) => (
-        <div key={i} className="flex items-center gap-2">
+        <div
+          key={i}
+          className="flex items-center gap-2"
+          draggable={numbered}
+          onDragStart={() => setDragIndex(i)}
+          onDragOver={(e) => numbered && e.preventDefault()}
+          onDrop={() => reorder(i)}
+        >
+          {numbered && <GripVertical size={16} className="shrink-0 text-ink-soft cursor-grab" />}
           {numbered && (
             <span className="shrink-0 w-6 h-6 rounded-full bg-cream-dark text-ink-soft text-xs font-semibold flex items-center justify-center">
               {i + 1}

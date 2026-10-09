@@ -43,6 +43,7 @@ export default function AddRecipeModal({ onClose, onCreate, onUpdate, existingLa
   const [cookTime, setCookTime] = useState(recipe?.cookTime ?? '');
   const [servings, setServings] = useState(recipe?.servings ?? '');
   const [error, setError] = useState('');
+  const [showUnsavedPrompt, setShowUnsavedPrompt] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [recipeFile, setRecipeFile] = useState<File | null>(null);
@@ -128,17 +129,16 @@ export default function AddRecipeModal({ onClose, onCreate, onUpdate, existingLa
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const trySave = (): boolean => {
     if (!title.trim()) {
       setError('Please give your recipe a title.');
-      return;
+      return false;
     }
     const cleanIngredients = ingredients.map((i) => capitalizeFirst(i.trim())).filter(Boolean);
     const cleanSteps = steps.map((s) => capitalizeFirst(s.trim())).filter(Boolean);
     if (cleanIngredients.length === 0 && cleanSteps.length === 0) {
       setError('Add at least one ingredient or step.');
-      return;
+      return false;
     }
 
     const draft: RecipeDraft = {
@@ -159,6 +159,37 @@ export default function AddRecipeModal({ onClose, onCreate, onUpdate, existingLa
     } else {
       onCreate(draft);
     }
+    return true;
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    trySave();
+  };
+
+  // v2: guard against losing typed-but-unsaved data when the user tries to
+  // close the dialog via the X or Cancel button instead of Save.
+  const hasUnsavedChanges = () => {
+    const initialIngredients = recipe?.ingredients ?? [];
+    const initialSteps = recipe?.steps ?? [];
+    const initialLabels = recipe?.labels ?? [];
+    const initialPhotos = recipe?.photos ?? [];
+    return (
+      title.trim() !== (recipe?.title ?? '') ||
+      description.trim() !== (recipe?.description ?? '') ||
+      JSON.stringify(ingredients) !== JSON.stringify(initialIngredients) ||
+      JSON.stringify(steps) !== JSON.stringify(initialSteps) ||
+      JSON.stringify(labels) !== JSON.stringify(initialLabels) ||
+      JSON.stringify(photos) !== JSON.stringify(initialPhotos) ||
+      prepTime.trim() !== (recipe?.prepTime ?? '') ||
+      cookTime.trim() !== (recipe?.cookTime ?? '') ||
+      servings.trim() !== (recipe?.servings ?? '')
+    );
+  };
+
+  const requestClose = () => {
+    if (hasUnsavedChanges()) setShowUnsavedPrompt(true);
+    else onClose();
   };
 
   return (
@@ -166,7 +197,7 @@ export default function AddRecipeModal({ onClose, onCreate, onUpdate, existingLa
       <div className="bg-cream w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl max-h-[92vh] overflow-y-auto shadow-2xl">
         <div className="sticky top-0 bg-cream/95 backdrop-blur z-10 flex items-center justify-between px-5 sm:px-7 py-4 border-b border-cream-dark">
           <h2 className="font-display text-xl font-semibold text-ink">{isEditing ? 'Edit recipe' : 'Add a recipe'}</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-cream-dark" aria-label="Close">
+          <button onClick={requestClose} className="p-2 rounded-full hover:bg-cream-dark" aria-label="Close">
             <X size={20} />
           </button>
         </div>
@@ -365,7 +396,7 @@ export default function AddRecipeModal({ onClose, onCreate, onUpdate, existingLa
           <div className="flex gap-3 pt-2">
             <button
               type="button"
-              onClick={onClose}
+              onClick={requestClose}
               className="flex-1 py-2.5 rounded-full border border-cream-dark text-ink-soft font-medium hover:bg-cream-dark"
             >
               Cancel
@@ -379,6 +410,55 @@ export default function AddRecipeModal({ onClose, onCreate, onUpdate, existingLa
           </div>
         </form>
       </div>
+
+      {showUnsavedPrompt && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setShowUnsavedPrompt(false)}
+        >
+          <div
+            className="bg-cream w-full max-w-sm rounded-2xl shadow-2xl p-5 flex flex-col gap-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h3 className="font-display text-lg font-semibold text-ink">Save changes?</h3>
+                <p className="text-sm text-ink-soft mt-1">You have unsaved changes to this recipe.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowUnsavedPrompt(false)}
+                className="shrink-0 p-1.5 rounded-full hover:bg-cream-dark"
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowUnsavedPrompt(false);
+                  onClose();
+                }}
+                className="flex-1 py-2.5 rounded-full border border-cream-dark text-ink-soft font-medium hover:bg-cream-dark"
+              >
+                Discard changes
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  trySave();
+                  setShowUnsavedPrompt(false);
+                }}
+                className="flex-1 py-2.5 rounded-full bg-clay text-white font-medium hover:bg-clay-dark shadow-sm"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
