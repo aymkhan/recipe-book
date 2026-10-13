@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { X, Clock, Users, ChefHat, Trash2, Tag, Pencil } from 'lucide-react';
 import type { Recipe } from '../types';
 
@@ -16,33 +16,6 @@ interface RecipeDetailModalProps {
 export default function RecipeDetailModal({ recipe, onClose, onDelete, onEdit, onSelectLabel, canEdit }: RecipeDetailModalProps) {
   const [activePhoto, setActivePhoto] = useState(0);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
-
-  // v2: on touch devices, swipe left (anywhere) or swipe down (only when
-  // already scrolled to the top, so it doesn't hijack normal scrolling) to
-  // close the recipe, same as tapping the X.
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const t = e.touches[0];
-    touchStart.current = { x: t.clientX, y: t.clientY };
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStart.current) return;
-    const t = e.changedTouches[0];
-    const deltaX = t.clientX - touchStart.current.x;
-    const deltaY = t.clientY - touchStart.current.y;
-    touchStart.current = null;
-
-    const SWIPE_THRESHOLD = 80;
-    const isLeftSwipe = deltaX < -SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY);
-    const isDownSwipeAtTop =
-      deltaY > SWIPE_THRESHOLD &&
-      Math.abs(deltaY) > Math.abs(deltaX) &&
-      (panelRef.current?.scrollTop ?? 0) <= 0;
-
-    if (isLeftSwipe || isDownSwipeAtTop) onClose();
-  };
 
   return (
     <div
@@ -50,11 +23,8 @@ export default function RecipeDetailModal({ recipe, onClose, onDelete, onEdit, o
       onClick={onClose}
     >
       <div
-        ref={panelRef}
         className="bg-cream w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl max-h-[92vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
       >
         <div className="relative aspect-[4/3] sm:aspect-[16/9] bg-cream-dark">
           {recipe.videoThumbnail && activePhoto === 0 ? (
