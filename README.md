@@ -10,7 +10,7 @@ organized place.
 - Add new recipes, including photos
 - Tag each recipe with one or more labels (e.g. `beef`, `mom`, `vegetarian`)
   so it surfaces under every matching category, not just one
-- Pretty, simple UI
+- Simple UI
 
 ## Plan
 
