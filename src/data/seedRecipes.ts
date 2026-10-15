@@ -42,7 +42,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'aloo-tikki-cutlets',
     title: 'Aloo Tikki Cutlets',
-    description: 'Crisp potato cutlets spiced with chaat masala and green chili, finished golden in hot oil.',
+    description: 'Crispy and flavorful potato cutlets spiced with chaat masala.',
     ingredients: [
       '5 large potatoes, peeled and quartered',
       '1 tsp salt',
@@ -98,7 +98,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'ammi-bhindi-aloo-gobi',
     title: "Ammi's Bhindi (or Aloo Gobi) Masala",
     description:
-      "Ammi's bhindi aloo masala base which can be swapped with gobi, baigan, or aloo matar tamatar and it all works the same way.",
+      "Ammi's bhindi aloo where bhindi can be swapped with gobi (cauliflower), baigan (eggplant), or tomatoes and peas.",
     ingredients: [
       'Bhindi (okra), cut into small pieces, or substitute gobi, baigan, or aloo matar tamatar',
       'Mustard oil',
@@ -129,7 +129,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-chicken-stew',
     title: "Ammi's Chicken Stew",
-    description: 'A family favorite home-style chicken stew thickened with a touch of flour and brightened with hari mirch.',
+    description: 'A family favorite home-style chicken stew.',
     ingredients: [
       'Chicken breast, cut into small cubes',
       'Onion',
@@ -160,8 +160,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-chicken-tikka',
     title: "Ammi's Chicken Tikka",
-    description:
-      "Ammi's simple stovetop chicken tikka: marinated and cooked right in the same pot.",
+    description: "Ammi's simple chicken tikka recipe, marinated and cooked in the same pot.",
     ingredients: ['Chicken, washed and strained', 'Shan tikka masala', 'Ginger-garlic paste', 'Plain yogurt', 'Oil'],
     steps: [
       'In a pot add the oil, ginger-garlic paste, Shan tikka masala, and plain yogurt and mix it all together',
@@ -188,8 +187,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-daal-chawal',
     title: "Ammi's Everyday Daal",
-    description:
-      'The daal Ammi makes for daily daal chawal: masoor and moong daal finished with a sizzling cumin-and-red-chili tarka.',
+    description: 'The daal Ammi makes for everyday daal chawal.',
     ingredients: [
       'Red daal (masoor)',
       'Yellow daal (moong), half the amount of masoor',
@@ -279,8 +277,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-khichri',
     title: "Ammi's Khichri (Regular & Patli)",
-    description:
-      "Ammi's comforting rice-and-daal khichri, plus the thinner patli version she makes when someone's feeling under the weather.",
+    description: 'Two different types of khichri Ammi makes, regular and thinned out (patli khichri).',
     ingredients: [],
     steps: [],
     sections: [
@@ -335,8 +332,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-yakhni',
     title: "Ammi's Yakhni (Incomplete)",
-    description:
-      "A clear, whole-spice chicken broth Ammi simmers low and slow.",
+    description: 'A clear, whole spice chicken broth soup.',
     ingredients: [
       'Chicken, with bones, washed and cleaned',
       'Oil, a small amount',
@@ -363,7 +359,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
     id: 'rkk-chicken-biryani',
     title: "RKK's Chicken Biryani",
     description:
-      "This is not a family recipe. Ruby ka Kitchen (a popular chef on YouTube) shared this delicious recipe which I have made and enjoyed several times",
+      "This is not a family recipe. Ruby ka Kitchen (a popular chef on YouTube) shared this delicious recipe which I have made and enjoyed several times.",
     ingredients: [
       '3½–4 cups rice, washed and soaked',
       '2 lb chicken',
@@ -402,8 +398,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'vegetable-chow-mein',
     title: 'Vegetable Chow Mein',
-    description:
-      'The vegetable-forward version of chow mein, flagged in the notes as the better of two recipes, made with a proper stir-fry sauce.',
+    description: "I make this at least once a month. It's simple and delicious!",
     ingredients: [
       'Spaghetti or chow mein noodles',
       'Cabbage, thinly sliced',
@@ -437,7 +432,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-corn-rice',
     title: "Ammi's Corn Rice",
-    description: 'A simple, fragrant rice pilaf studded with sweet corn, finished with a spoonful of yogurt for extra creaminess.',
+    description: 'A simple and fragrant rice made with sweet corn.',
     ingredients: [
       'Rice, washed and soaked 30 minutes',
       'Oil',
@@ -466,8 +461,9 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   },
   {
     id: 'daal-tadka-mazadaar',
-    title: 'Daal Tadka (Mazadaar Recipe)',
-    description: 'A three-daal blend finished with a generous butter-and-garlic tarka, adapted from a recipe by Mazadaar.',
+    title: 'Daal Tarka',
+    description:
+      'This is not a family recipe. Mazadaar (a popular chef on YouTube/Instagram) makes this delicious three-daal blend finished with a generous butter and garlic tarka.',
     ingredients: [
       '1/2 cup moong daal',
       '1/4 cup masoor daal',
@@ -501,7 +497,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'doodh-patti-chai',
     title: 'Doodh Patti Chai',
-    description: 'A creamy, stovetop-stirred milk tea recipe, written up as a note to a friend who kept asking for it.',
+    description: 'Rich and creamy chai recipe, written up as a note to a friend who kept asking for it.',
     ingredients: [
       "3 cups whole milk (not a plant milk, since it changes the taste)",
       '1/2 cup water',
@@ -524,14 +520,15 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'rkk-fried-rice',
     title: "RKK's Fried Rice",
-    description: 'A quick weeknight fried rice built on garlic, green onion, and a knorr cube for depth.',
+    description:
+      'This is not a family recipe. Ruby ka Kitchen (a popular chef on YouTube) makes this delicious and quick fried rice.',
     ingredients: [
       'Cooked white rice',
       'Oil',
       'Garlic',
       'Green onions, white and green parts separated',
       'Knorr cube (half or less, depending on rice quantity)',
-      'White pepper',
+      'White pepper powder',
       'Soy sauce',
     ],
     steps: [
@@ -547,7 +544,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'kaka-goat-biryani',
     title: "Kaka's Goat Biryani",
-    description: 'Biryani cooked with fragrant basmati rice and aromatic spices, with fall-apart tender meat.',
+    description: "Kaka's finger licking biryani cooked with fragrant basmati rice and aromatic spices, with fall-apart tender meat.",
     ingredients: [
       '1½ lb goat',
       '1½ cup yogurt',
@@ -586,7 +583,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-khushka-rice',
     title: "Ammi's Khushka Rice",
-    description: "Plain spiced rice, browned onions and all: the kind Ammi makes as a simple side to go with any curry.",
+    description: 'Plain spiced rice and peas which goes really well with any type of curry.',
     ingredients: [
       'Rice, washed and soaked',
       'Onions',
@@ -612,7 +609,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'mediterranean-air-fryer-chicken',
     title: 'Mediterranean Air Fryer Chicken',
-    description: 'A quick, no-fuss air fryer chicken marinated in yogurt, lemon, and paprika.',
+    description: 'Quick and easy Mediterranean style chicken.',
     ingredients: ['Chicken', 'Oil', 'Ginger-garlic paste', 'Salt', 'Pepper', 'Paprika', 'Plain yogurt', 'Lemon juice'],
     steps: [
       'Marinate the chicken with the oil, ginger-garlic paste, salt, pepper, paprika, yogurt, and lemon juice.',
@@ -626,7 +623,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'munji-khao-suey',
     title: "Munji's Khao Suey",
-    description: "Munji's coconut curry noodle soup, with a beef curry base and a full spread of crunchy toppings.",
+    description: "Munji's khao suey - coconut curry noodle soup with a beef curry base.",
     ingredients: [
       'Thin curly egg noodles (not wide)',
       'Salt',
@@ -682,7 +679,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammijaan-qeema',
     title: "Ammijaan's Qeema",
-    description: "Ammijaan's everyday minced meat curry, finished with diced potatoes, cilantro, and green chilies.",
+    description: "Ammijaan's perfectly cooked qeema aloo, finished with diced potatoes, cilantro, and green chilies.",
     ingredients: [
       'Qeema (minced meat)',
       'Oil',
@@ -712,7 +709,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'chicken-pulao',
     title: 'Chicken Pulao',
-    description: 'A layered chicken pulao finished with a proper dum and a generous topping of deep-fried onions.',
+    description: 'A layered chicken and rice pulao.',
     ingredients: [
       'Chicken',
       'Ginger-garlic paste',
@@ -742,8 +739,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'abbu-shrimp-curry',
     title: "Abbu's Shrimp Curry",
-    description:
-      "Abbu's shrimp curry, cooked in two stages: the shrimp seared first, then finished in a separate, from-scratch curry base.",
+    description: "Abbu makes the best shrimp curry. Enjoy!",
     ingredients: [
       'Shrimp, washed, cleaned, and dried',
       'Turmeric',
@@ -784,7 +780,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-tamatar-gosht',
     title: "Ammi's Tamatar Gosht",
-    description: "A rich tomato beef curry: the kind where the meat gets properly bhoono'd before the tomatoes ever go in.",
+    description: 'A rich and flavorful beef and tomato curry.',
     ingredients: [
       'Beef (1 lb)',
       'Tomatoes (3 large, for 1 lb beef)',
@@ -820,7 +816,7 @@ export const seedRecipes: Omit<Recipe, 'createdBy' | 'createdByName'>[] = [
   {
     id: 'ammi-veggie-soup',
     title: "Ammi's Veggie Soup",
-    description: 'A hearty, savory vegetable soup built on beet and potato stock, rounded out with soy and hoisin sauce.',
+    description: 'Easy one pot vegetable soup.',
     ingredients: [
       'Beets',
       'Potatoes',
