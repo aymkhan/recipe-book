@@ -235,6 +235,10 @@ function App() {
         )}
       </main>
 
+      <footer className="text-center text-xs text-ink-soft py-6">
+        Made with ♥ by the Khans · {new Date().getFullYear()}
+      </footer>
+
       {selectedRecipe && (
         <RecipeDetailModal
           recipe={selectedRecipe}
